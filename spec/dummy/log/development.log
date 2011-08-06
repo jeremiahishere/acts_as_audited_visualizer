@@ -1,0 +1,123 @@
+  [1m[36mSQL (1.7ms)[0m  [1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [1m[35mSQL (0.2ms)[0m  select sqlite_version(*)
+  [1m[36mSQL (75.4ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [1m[35mSQL (0.1ms)[0m  PRAGMA index_list("schema_migrations")
+  [1m[36mSQL (31.7ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35mSQL (0.3ms)[0m   SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+  [1m[36mSQL (0.2ms)[0m  [1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [1m[35mSQL (0.2ms)[0m  SELECT "schema_migrations"."version" FROM "schema_migrations"
+Migrating to DeviseCreateUsers (20110806141109)
+  [1m[36mSQL (0.9ms)[0m  [1mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar(255) DEFAULT '' NOT NULL, "encrypted_password" varchar(128) DEFAULT '' NOT NULL, "reset_password_token" varchar(255), "reset_password_sent_at" datetime, "remember_created_at" datetime, "sign_in_count" integer DEFAULT 0, "current_sign_in_at" datetime, "last_sign_in_at" datetime, "current_sign_in_ip" varchar(255), "last_sign_in_ip" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.1ms)[0m  PRAGMA index_list("users")
+  [1m[36mSQL (11.6ms)[0m  [1mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[35mSQL (0.1ms)[0m  PRAGMA index_list("users")
+  [1m[36mSQL (0.1ms)[0m  [1mPRAGMA index_info('index_users_on_email')[0m
+  [1m[35mSQL (0.4ms)[0m  CREATE UNIQUE INDEX "index_users_on_reset_password_token" ON "users" ("reset_password_token")
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20110806141109')[0m
+  [1m[35mSQL (0.8ms)[0m   SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+  [1m[36mSQL (0.2ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations"[0m
+  [1m[35mSQL (0.2ms)[0m   SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+  [1m[36mSQL (0.2ms)[0m  [1mPRAGMA index_list("users")[0m
+  [1m[35mSQL (0.1ms)[0m  PRAGMA index_info('index_users_on_reset_password_token')
+  [1m[36mSQL (0.1ms)[0m  [1mPRAGMA index_info('index_users_on_email')[0m
+  [1m[36mSQL (2.1ms)[0m  [1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [1m[35mSQL (0.3ms)[0m   SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+  [1m[36mSQL (0.3ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations"[0m
+Migrating to DeviseCreateUsers (20110806141109)
+Migrating to CreateBooks (20110806141634)
+  [1m[35mSQL (0.1ms)[0m  select sqlite_version(*)
+  [1m[36mSQL (1.4ms)[0m  [1mCREATE TABLE "books" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "genre_id" integer, "title" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20110806141634')
+Migrating to CreateAuthors (20110806141820)
+  [1m[36mSQL (0.7ms)[0m  [1mCREATE TABLE "authors" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "first_name" varchar(255), "last_name" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20110806141820')
+Migrating to CreateGenres (20110806141905)
+  [1m[36mSQL (0.7ms)[0m  [1mCREATE TABLE "genres" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (1.7ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20110806141905')
+  [1m[36mSQL (0.4ms)[0m  [1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [1m[35mSQL (17.4ms)[0m  SELECT "schema_migrations"."version" FROM "schema_migrations"
+  [1m[36mSQL (0.4ms)[0m  [1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [1m[35mSQL (0.1ms)[0m  PRAGMA index_list("authors")
+  [1m[36mSQL (0.1ms)[0m  [1mPRAGMA index_list("books")[0m
+  [1m[35mSQL (0.1ms)[0m  PRAGMA index_list("genres")
+  [1m[36mSQL (0.2ms)[0m  [1mPRAGMA index_list("users")[0m
+  [1m[35mSQL (0.1ms)[0m  PRAGMA index_info('index_users_on_reset_password_token')
+  [1m[36mSQL (0.1ms)[0m  [1mPRAGMA index_info('index_users_on_email')[0m
+DEPRECATION WARNING: config.action_view.debug_rjs will be removed in 3.1, from 3.1 onwards you will need to install prototype-rails to continue to use RJS templates . (called from service at /home/jeremiah/.rvm/rubies/ruby-1.9.2-p290/lib/ruby/1.9.1/webrick/httpserver.rb:111)
+
+
+Started GET "/" for 192.168.1.104 at 2011-08-06 10:20:52 -0400
+  Processing by PagesController#index as HTML
+Rendered pages/index.html.erb within layouts/application (4.2ms)
+Completed 200 OK in 16ms (Views: 15.3ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/users" for 192.168.1.104 at 2011-08-06 10:22:31 -0400
+
+ActionController::RoutingError (No route matches "/users"):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (1.6ms)
+
+
+Started GET "/books" for 192.168.1.104 at 2011-08-06 10:22:41 -0400
+  Processing by BooksController#index as HTML
+Completed   in 125ms
+
+
+Started GET "/users/sign_in" for 192.168.1.104 at 2011-08-06 10:22:41 -0400
+  Processing by Devise::SessionsController#new as HTML
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/devise-1.4.2/app/views/devise/shared/_links.erb (4.2ms)
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/devise-1.4.2/app/views/devise/sessions/new.html.erb within layouts/application (69.5ms)
+Completed 200 OK in 140ms (Views: 82.8ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/users/sign_up" for 192.168.1.104 at 2011-08-06 10:22:49 -0400
+  Processing by Devise::RegistrationsController#new as HTML
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/devise-1.4.2/app/views/devise/shared/_links.erb (3.0ms)
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/devise-1.4.2/app/views/devise/registrations/new.html.erb within layouts/application (39.1ms)
+Completed 200 OK in 82ms (Views: 51.9ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/users" for 192.168.1.104 at 2011-08-06 10:23:08 -0400
+  Processing by Devise::RegistrationsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"mufr6H0nnnisCHfFxcf5rChriIqgaxM1klEx86B6maY=", "user"=>{"email"=>"jeremiah.hemphill@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}, "commit"=>"Sign up"}
+  [1m[36mSQL (1.0ms)[0m  [1mSELECT 1 FROM "users" WHERE ("users"."email" = 'jeremiah.hemphill@gmail.com') LIMIT 1[0m
+  [1m[35mSQL (0.8ms)[0m   SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+  [1m[36mAREL (0.9ms)[0m  [1mINSERT INTO "users" ("email", "encrypted_password", "reset_password_token", "reset_password_sent_at", "remember_created_at", "sign_in_count", "current_sign_in_at", "last_sign_in_at", "current_sign_in_ip", "last_sign_in_ip", "created_at", "updated_at") VALUES ('jeremiah.hemphill@gmail.com', '$2a$10$e.VOBKgmx6gya8Pnk.cY.eTd0mPYV0.s4Ro/62HgJm07D7cSjfCD.', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, '2011-08-06 14:23:09.799631', '2011-08-06 14:23:09.799631')[0m
+  [1m[35mAREL (0.6ms)[0m  UPDATE "users" SET "last_sign_in_at" = '2011-08-06 14:23:09.894687', "current_sign_in_at" = '2011-08-06 14:23:09.894687', "last_sign_in_ip" = '192.168.1.104', "current_sign_in_ip" = '192.168.1.104', "sign_in_count" = 1, "updated_at" = '2011-08-06 14:23:09.895891' WHERE "users"."id" = 1
+Redirected to http://192.168.1.116:3000/books
+Completed 302 Found in 1044ms
+
+
+Started GET "/books" for 192.168.1.104 at 2011-08-06 10:23:10 -0400
+  Processing by BooksController#index as HTML
+  [1m[36mUser Load (1.4ms)[0m  [1mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1[0m
+  [1m[35mBook Load (0.3ms)[0m  SELECT "books".* FROM "books"
+Rendered books/index.html.erb within layouts/application (5.5ms)
+Completed 200 OK in 265ms (Views: 23.3ms | ActiveRecord: 1.7ms)

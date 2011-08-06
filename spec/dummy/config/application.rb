@@ -8,6 +8,7 @@ require "action_mailer/railtie"
 
 Bundler.require
 require "acts_as_audited_visualizer"
+require "devise"
 
 module Dummy
   class Application < Rails::Application
