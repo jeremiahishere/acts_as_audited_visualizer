@@ -1,0 +1,21 @@
+<h1>Listing audits</h1>
+
+<table>
+  <tr>
+    <th>Auditable Type</th>
+    <th>Auditable Id</th>
+    <th>User Id</th>
+    <th>Action</th>
+    <th>Changes</th>
+  </tr>
+
+<% @audits.each do |audit| %>
+  <tr>
+    <td><%= audit.auditable_type %></td>
+    <td><%= audit.auditable_id %></td>
+    <td><%= audit.user_id %></td>
+    <td><%= audit.action %></td>
+    <td><%= audit.audit_changes %></td>
+  </tr>
+<% end %>
+</table>

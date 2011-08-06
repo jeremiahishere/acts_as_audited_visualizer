@@ -1,4 +1,5 @@
 Dummy::Application.routes.draw do
+  resources :audits
   resources :genres
 
   resources :authors

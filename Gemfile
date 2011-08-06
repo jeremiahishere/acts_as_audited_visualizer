@@ -7,7 +7,7 @@ source "http://rubygems.org"
 # Include everything needed to run rake, tests, features, etc.
 gem "rails", "3.0.9"
 gem "sqlite3"
-gem "acts_as_audited"
+gem "acts_as_audited_rails3"
 
 group :development do
   gem "capybara", ">= 0.4.0"
