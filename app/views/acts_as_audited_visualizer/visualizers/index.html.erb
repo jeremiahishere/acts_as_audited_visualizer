@@ -1,4 +1,4 @@
-hello
+<div class="content">This is the audit history<br /></div>
 <script>
 $(document).ready(function()  {
   var last_update_timestamp = 0;
@@ -6,18 +6,41 @@ $(document).ready(function()  {
   //update the canvas with an ajax call to the controller
   function update_audits()  {
     timestamp = self.last_update_timestamp
-    console.log("acts_as_audited_visualizer/update_audits/" + timestamp);
     $.ajax({
       url: "acts_as_audited_visualizer/update_audits/" + timestamp,
       dataType: "json",
       success: function(json)  {
-        self.last_update_timestamp = new Date();
-        console.log(json);
+        self.last_update_timestamp = Number(new Date());
+        //add the new data to the content div
+        inner_html = $('.content').html();
+        inner_html += audit_to_s(json);
+        $('.content').html(inner_html);
       }
     });
   }
 
-  //update the canvas every second
-  setInterval(update_audits, 1000);
+  //convert input from the ajax call into tags
+  function audit_to_s(audit) {
+    output = "";
+    $.each(audit, function(id, audit_group)  {
+      output += "<div id='audit_group_" + id + "' class='audit_group'>";
+      $.each(audit_group, function(key, value)  {
+        output += "<span id='" + value.model + "-" + value.id + "' class='content_audit'>";
+        output += value.model + "<br />" + value.name + "<br />";
+        output += "</span>";
+      });
+      output += "</div>";
+    });
+    return output
+  }
+
+  //update the canvas every few seconds
+  function start_updating() {
+    setInterval(update_audits, 10000);
+  }  
+
+  //get initial canvas
+  update_audits();
+  setTimeout(start_updating, 2000);
 });
 </script>

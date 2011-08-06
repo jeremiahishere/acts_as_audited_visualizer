@@ -2,6 +2,8 @@
 
 Visualizer for database updates using acts_as_audited to track the changes.  For some reason, I am using acts_as_audited_rails3 to make my dummy project work.  Not sure why I can't get acts_as_audited to show up in the dummy.
 
+Note that the dummy app is currently hard coded to eastern time
+
 == Contributing to acts_as_audited_visualizer
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet

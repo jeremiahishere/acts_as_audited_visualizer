@@ -23,9 +23,9 @@ module ActsAsAuditedVisualizer
       if params[:timestamp] == "undefined"
         created_at = 1.day.ago
       else
-        created_at = params[:timestamp]
+        created_at = Time.at(params[:timestamp].to_i/1000)
       end
-      audits = Audit.where(["created_at > ?", created_at])
+      audits = Audit.where(["created_at > ? or updated_at > ?", created_at, created_at])
       output = {}
       audits.each do |audit|
         record = []

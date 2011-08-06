@@ -54,3 +54,16 @@ div.field, div.actions {
   font-size: 12px;
   list-style: square;
 }
+
+/* very basic styling for the audit system */
+.audit_group {
+  background-color: #EEEEEE;
+  width: 400px;
+  padding: 5px;
+  margin: 5px;
+}
+
+/* very basic styling for the audit system */
+.content_audit {
+  background-color: #AAAAAA;
+}
