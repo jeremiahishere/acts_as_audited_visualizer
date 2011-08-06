@@ -1,6 +1,6 @@
 = acts_as_audited_visualizer
 
-Description goes here.
+Visualizer for database updates using acts_as_audited to track the changes.  For some reason, I am using acts_as_audited_rails3 to make my dummy project work.  Not sure why I can't get acts_as_audited to show up in the dummy.
 
 == Contributing to acts_as_audited_visualizer
  
