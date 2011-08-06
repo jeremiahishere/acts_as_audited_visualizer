@@ -4,11 +4,28 @@ module ActsAsAuditedVisualizer
       # canvas goes here
     end
 
+    # get all audits created after the given timestamp
+    # if the timestamp is set to "undefined", return all audits in the last day
+    #
+    # audits are return with the format
+    # {
+    #   audit_id_1: [
+    #     { model: "User", id: "user_id", name: "User's name" }
+    #     { model: "auditable type", id: "auditable id", name: "Thing's name" }
+    #     { other models are guessed using and stored with the same method }
+    #   ]
+    #   audit_id_2: [
+    #     ...
+    #   ]
+    # }
     def update_audits
-      # not sure on the format of the timestamp yet
-      created_at = params[:timestamp]
-
-      audits = Audit.where(:created_at => created_at)
+      created_at = nil
+      if params[:timestamp] == "undefined"
+        created_at = 1.day.ago
+      else
+        created_at = params[:timestamp]
+      end
+      audits = Audit.where(["created_at > ?", created_at])
       output = {}
       audits.each do |audit|
         record = []
@@ -22,7 +39,7 @@ module ActsAsAuditedVisualizer
         record.push({
           :model => audit.auditable_type,
           :id => audit.auditable_id,
-          :name => audit.audtiable_type.constantize.find_by_id(audit.auditable_id).name
+          :name => audit.auditable_type.constantize.find_by_id(audit.auditable_id).name
         })
         # guess the other records
         audit.audit_changes.each_pair do |key, value|

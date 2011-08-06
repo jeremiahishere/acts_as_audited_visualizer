@@ -12,7 +12,7 @@ gem "acts_as_audited_rails3"
 group :development do
   gem "capybara", ">= 0.4.0"
   gem "rspec-rails", ">= 2.0.0.beta"
-  #gem "ruby-debug19"
+  gem "ruby-debug19", :require => "ruby-debug"
 
   gem "shoulda", ">= 0"
   gem "bundler", "~> 1.0.0"

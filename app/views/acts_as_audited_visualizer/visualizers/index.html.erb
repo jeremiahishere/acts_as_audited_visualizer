@@ -1,1 +1,23 @@
 hello
+<script>
+$(document).ready(function()  {
+  var last_update_timestamp = 0;
+
+  //update the canvas with an ajax call to the controller
+  function update_audits()  {
+    timestamp = self.last_update_timestamp
+    console.log("acts_as_audited_visualizer/update_audits/" + timestamp);
+    $.ajax({
+      url: "acts_as_audited_visualizer/update_audits/" + timestamp,
+      dataType: "json",
+      success: function(json)  {
+        self.last_update_timestamp = new Date();
+        console.log(json);
+      }
+    });
+  }
+
+  //update the canvas every second
+  setInterval(update_audits, 1000);
+});
+</script>
