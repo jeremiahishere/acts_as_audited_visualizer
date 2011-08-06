@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+ruby_string="ruby-1.9.2-p290"
+gemset_name="acts_as_audited_visualizer"

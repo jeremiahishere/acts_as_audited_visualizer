@@ -427,3 +427,5 @@ Started GET "/audits" for 192.168.1.104 at 2011-08-06 11:22:54 -0400
   [1m[36mAudit Load (2.1ms)[0m  [1mSELECT "audits".* FROM "audits"[0m
 Rendered audits/index.html.erb within layouts/application (76.9ms)
 Completed 200 OK in 465ms (Views: 91.4ms | ActiveRecord: 5.6ms)
+DEPRECATION WARNING: config.action_view.debug_rjs will be removed in 3.1, from 3.1 onwards you will need to install prototype-rails to continue to use RJS templates . (called from <top (required)> at /srv/acts_as_audited_visualizer/spec/dummy/config/environment.rb:5)
+DEPRECATION WARNING: config.action_view.debug_rjs will be removed in 3.1, from 3.1 onwards you will need to install prototype-rails to continue to use RJS templates . (called from <top (required)> at /srv/acts_as_audited_visualizer/spec/dummy/config/environment.rb:5)

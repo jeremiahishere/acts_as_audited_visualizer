@@ -5,7 +5,9 @@ module ActsAsAuditedVisualizer
     end
 
     def update_audits
+      # not sure on the format of the timestamp yet
       created_at = params[:timestamp]
+
       audits = Audit.where(:created_at => created_at)
       output = {}
       audits.each do |audit|
