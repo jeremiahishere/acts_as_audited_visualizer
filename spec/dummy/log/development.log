@@ -429,3 +429,297 @@ Rendered audits/index.html.erb within layouts/application (76.9ms)
 Completed 200 OK in 465ms (Views: 91.4ms | ActiveRecord: 5.6ms)
 DEPRECATION WARNING: config.action_view.debug_rjs will be removed in 3.1, from 3.1 onwards you will need to install prototype-rails to continue to use RJS templates . (called from <top (required)> at /srv/acts_as_audited_visualizer/spec/dummy/config/environment.rb:5)
 DEPRECATION WARNING: config.action_view.debug_rjs will be removed in 3.1, from 3.1 onwards you will need to install prototype-rails to continue to use RJS templates . (called from <top (required)> at /srv/acts_as_audited_visualizer/spec/dummy/config/environment.rb:5)
+DEPRECATION WARNING: config.action_view.debug_rjs will be removed in 3.1, from 3.1 onwards you will need to install prototype-rails to continue to use RJS templates . (called from <top (required)> at /srv/acts_as_audited_visualizer/spec/dummy/config/environment.rb:5)
+
+
+Started GET "/" for 192.168.1.104 at 2011-08-06 15:31:48 -0400
+  Processing by PagesController#index as HTML
+Completed   in 1ms
+
+
+Started GET "/users/sign_in" for 192.168.1.104 at 2011-08-06 15:31:49 -0400
+  Processing by Devise::SessionsController#new as HTML
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/devise-1.4.2/app/views/devise/shared/_links.erb (7.0ms)
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/devise-1.4.2/app/views/devise/sessions/new.html.erb within layouts/application (52.5ms)
+Completed 200 OK in 392ms (Views: 75.7ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/users/sign_in" for 192.168.1.104 at 2011-08-06 15:31:59 -0400
+  Processing by Devise::SessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"+CwkD4mijQBl/ppmijcgERaXgQenNEbSf5WhMVJzwpA=", "user"=>{"email"=>"jeremiah.hemphill@gmail.com", "password"=>"[FILTERED]", "remember_me"=>"0"}, "commit"=>"Sign in"}
+  [1m[36mSQL (17.8ms)[0m  [1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [1m[35mUser Load (1.6ms)[0m  SELECT "users".* FROM "users" WHERE "users"."email" = 'jeremiah.hemphill@gmail.com' LIMIT 1
+  [1m[36mSQL (1.0ms)[0m  [1mSELECT MAX("audits"."version") AS max_id FROM "audits" WHERE "audits"."auditable_id" = 1 AND "audits"."auditable_type" = 'User'[0m
+  [1m[35mAREL (1.0ms)[0m  INSERT INTO "audits" ("created_at", "updated_at", "auditable_id", "auditable_type", "user_id", "user_type", "username", "action", "audit_changes", "version", "comment", "full_model") VALUES ('2011-08-06 19:32:00.788561', '2011-08-06 19:32:00.788561', 1, 'User', 1, 'User', NULL, 'update', '---
+current_sign_in_at:
+- 2011-08-06 14:23:09.894687000Z
+- 2011-08-06 19:32:00.572818588Z
+sign_in_count:
+- 1
+- 2
+', 1, NULL, NULL)
+  [1m[36mAREL (0.4ms)[0m  [1mUPDATE "users" SET "current_sign_in_at" = '2011-08-06 19:32:00.572818', "sign_in_count" = 2, "updated_at" = '2011-08-06 19:32:00.879473' WHERE "users"."id" = 1[0m
+Redirected to http://192.168.1.116:3000/
+Completed 302 Found in 1275ms
+
+
+Started GET "/" for 192.168.1.104 at 2011-08-06 15:32:01 -0400
+  Processing by PagesController#index as HTML
+  [1m[35mUser Load (2.0ms)[0m  SELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1
+Rendered pages/index.html.erb within layouts/application (4.6ms)
+Completed 200 OK in 230ms (Views: 34.3ms | ActiveRecord: 2.0ms)
+
+
+Started GET "/acts_as_audited_visualizer/" for 192.168.1.104 at 2011-08-06 15:32:11 -0400
+
+ActionController::RoutingError (uninitialized constant ActsAsAuditedVisualizer::VisualizersController):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (1.8ms)
+
+
+Started GET "/acts_as_audited_visualizer/" for 192.168.1.104 at 2011-08-06 15:33:24 -0400
+
+ActionController::RoutingError (uninitialized constant ActsAsAuditedVisualizer::ActsAsAuditedVisualizersController):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (1.9ms)
+
+
+Started GET "/acts_as_audited_visualizer/" for 192.168.1.104 at 2011-08-06 15:33:26 -0400
+
+ActionController::RoutingError (uninitialized constant ActsAsAuditedVisualizer::ActsAsAuditedVisualizersController):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (1.9ms)
+
+
+Started GET "/acts_as_audited_visualizer/visualizer" for 192.168.1.104 at 2011-08-06 15:37:06 -0400
+
+ActionController::RoutingError (No route matches "/acts_as_audited_visualizer/visualizer"):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (2.1ms)
+
+
+Started GET "/acts_as_audited_visualizer/visualizer" for 192.168.1.104 at 2011-08-06 15:37:18 -0400
+
+ActionController::RoutingError (uninitialized constant ActsAsAuditedVisualizer::VisualizersController):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (1.7ms)
+
+
+Started GET "/acts_as_audited_visualizer/visualizer" for 192.168.1.104 at 2011-08-06 15:37:34 -0400
+
+ActionController::RoutingError (No route matches "/acts_as_audited_visualizer/visualizer"):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (2.1ms)
+
+
+Started GET "/acts_as_audited_visualizer/visualizer" for 192.168.1.104 at 2011-08-06 15:37:36 -0400
+
+ActionController::RoutingError (No route matches "/acts_as_audited_visualizer/visualizer"):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (2.3ms)
+
+
+Started GET "/acts_as_audited_visualizer/visualizers" for 192.168.1.104 at 2011-08-06 15:37:38 -0400
+
+ActionController::RoutingError (uninitialized constant ActsAsAuditedVisualizer::VisualizersController):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (76.1ms)
+DEPRECATION WARNING: config.action_view.debug_rjs will be removed in 3.1, from 3.1 onwards you will need to install prototype-rails to continue to use RJS templates . (called from <top (required)> at /srv/acts_as_audited_visualizer/spec/dummy/config/environment.rb:5)
+DEPRECATION WARNING: config.action_view.debug_rjs will be removed in 3.1, from 3.1 onwards you will need to install prototype-rails to continue to use RJS templates . (called from <top (required)> at /srv/acts_as_audited_visualizer/spec/dummy/config/environment.rb:5)
+DEPRECATION WARNING: config.action_view.debug_rjs will be removed in 3.1, from 3.1 onwards you will need to install prototype-rails to continue to use RJS templates . (called from <top (required)> at /srv/acts_as_audited_visualizer/spec/dummy/config/environment.rb:5)
+
+
+Started GET "/hello" for 192.168.1.104 at 2011-08-06 15:43:41 -0400
+
+ActionController::RoutingError (uninitialized constant ActsAsAuditedVisualizer::VisualizersController):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (2.4ms)
+
+
+Started GET "/hello" for 192.168.1.104 at 2011-08-06 15:44:08 -0400
+
+ActionController::RoutingError (uninitialized constant ActsAsAuditedVisualizer::VisualizersController):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (1.7ms)
+
+
+Started GET "/hello" for 192.168.1.104 at 2011-08-06 15:44:09 -0400
+
+ActionController::RoutingError (uninitialized constant ActsAsAuditedVisualizer::VisualizersController):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (1.9ms)
+
+
+Started GET "/hello" for 192.168.1.104 at 2011-08-06 15:44:09 -0400
+
+ActionController::RoutingError (uninitialized constant ActsAsAuditedVisualizer::VisualizersController):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (2.0ms)
+
+
+Started GET "/hello" for 192.168.1.104 at 2011-08-06 15:44:33 -0400
+
+ActionController::RoutingError (uninitialized constant ActsAsAuditedVisualizer::VisualizersController):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (1.8ms)
+
+
+Started GET "/hello" for 192.168.1.104 at 2011-08-06 15:44:34 -0400
+
+ActionController::RoutingError (uninitialized constant ActsAsAuditedVisualizer::VisualizersController):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (1.9ms)
+DEPRECATION WARNING: config.action_view.debug_rjs will be removed in 3.1, from 3.1 onwards you will need to install prototype-rails to continue to use RJS templates . (called from <top (required)> at /srv/acts_as_audited_visualizer/spec/dummy/config/environment.rb:5)
+
+
+Started GET "/hello" for 192.168.1.104 at 2011-08-06 15:45:16 -0400
+
+ActionController::RoutingError (uninitialized constant ActsAsAuditedVisualizer::VisualizersController):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (1.9ms)
+
+
+Started GET "/hello" for 192.168.1.104 at 2011-08-06 15:45:17 -0400
+
+ActionController::RoutingError (uninitialized constant ActsAsAuditedVisualizer::VisualizersController):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (1.7ms)
+
+
+Started GET "/hello" for 192.168.1.104 at 2011-08-06 15:45:44 -0400
+
+ActionController::RoutingError (No route matches "/hello"):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (2.8ms)
+
+
+Started GET "/acts_as_audited_visualizer/" for 192.168.1.104 at 2011-08-06 15:45:50 -0400
+
+ActionController::RoutingError (uninitialized constant ActsAsAuditedVisualizer::VisualizersController):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (2.8ms)
+DEPRECATION WARNING: config.action_view.debug_rjs will be removed in 3.1, from 3.1 onwards you will need to install prototype-rails to continue to use RJS templates . (called from <top (required)> at /srv/acts_as_audited_visualizer/spec/dummy/config/environment.rb:5)
+
+
+Started GET "/acts_as_audited_visualizer/" for 192.168.1.104 at 2011-08-06 15:46:25 -0400
+
+SyntaxError (/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:17: syntax error, unexpected tASSOC, expecting '}'
+          :model => "User", 
+                   ^
+/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:17: syntax error, unexpected ',', expecting '}'
+          :model => "User", 
+                           ^
+/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:19: syntax error, unexpected tASSOC, expecting tCOLON2 or '[' or '.'
+          :name => User.find_by_id(audit.user_id).name
+                  ^
+/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:23: syntax error, unexpected tASSOC, expecting '}'
+          :model => audit.auditable_type
+                   ^
+/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:24: syntax error, unexpected tASSOC, expecting '}'
+          :id => audit.auditable_id
+                ^
+/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:25: syntax error, unexpected tASSOC, expecting '}'
+          :name => audit.audtiable_type.constan...
+                  ^
+/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:35: syntax error, unexpected tASSOC, expecting '}'
+                  :model => key_model,
+                           ^
+/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:36: syntax error, unexpected tASSOC, expecting tCOLON2 or '[' or '.'
+                  :id => value,
+                        ^
+/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:37: syntax error, unexpected tASSOC, expecting tCOLON2 or '[' or '.'
+                  :name => instance.name
+                          ^):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/_trace.erb (2.6ms)
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (42.1ms)
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (64.4ms)
+
+
+Started GET "/acts_as_audited_visualizer/" for 192.168.1.104 at 2011-08-06 15:47:22 -0400
+
+SyntaxError (/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:23: syntax error, unexpected tASSOC, expecting '}'
+          :model => audit.auditable_type
+                   ^
+/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:24: syntax error, unexpected tASSOC, expecting '}'
+          :id => audit.auditable_id
+                ^
+/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:25: syntax error, unexpected tASSOC, expecting '}'
+          :name => audit.audtiable_type.constan...
+                  ^
+/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:35: syntax error, unexpected tASSOC, expecting '}'
+                  :model => key_model,
+                           ^
+/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:36: syntax error, unexpected tASSOC, expecting tCOLON2 or '[' or '.'
+                  :id => value,
+                        ^
+/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:37: syntax error, unexpected tASSOC, expecting tCOLON2 or '[' or '.'
+                  :name => instance.name
+                          ^):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/_trace.erb (2.7ms)
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (3.2ms)
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (14.9ms)
+
+
+Started GET "/acts_as_audited_visualizer/" for 192.168.1.104 at 2011-08-06 15:47:48 -0400
+
+SyntaxError (/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:24: syntax error, unexpected tSYMBEG, expecting '}'
+          :id => audit.auditable_id
+           ^
+/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:25: syntax error, unexpected tASSOC, expecting keyword_end
+          :name => audit.audtiable_type.constan...
+                  ^
+/srv/acts_as_audited_visualizer/app/controllers/acts_as_audited_visualizer/visualizers_controller.rb:26: syntax error, unexpected '}', expecting keyword_end
+        })
+         ^):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/_trace.erb (2.5ms)
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (3.7ms)
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (17.8ms)
+
+
+Started GET "/acts_as_audited_visualizer/" for 192.168.1.104 at 2011-08-06 15:48:00 -0400
+  Processing by ActsAsAuditedVisualizer::VisualizersController#index as HTML
+  [1m[36mSQL (2.2ms)[0m  [1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [1m[35mUser Load (2.1ms)[0m  SELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1
+Completed 500 Internal Server Error in 593ms
+
+ActionView::MissingTemplate (Missing template acts_as_audited_visualizer/visualizers/index with {:handlers=>[:erb, :rjs, :builder, :rhtml, :rxml], :formats=>[:html], :locale=>[:en, :en]} in view paths "/srv/acts_as_audited_visualizer/spec/dummy/app/views", "/srv/acts_as_audited_visualizer/app/views", "/home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/devise-1.4.2/app/views"):
+  
+
+Rendered /home/jeremiah/.rvm/gems/ruby-1.9.2-p290@acts_as_audited_visualizer/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/missing_template.erb within rescues/layout (1.4ms)
+
+
+Started GET "/acts_as_audited_visualizer/" for 192.168.1.104 at 2011-08-06 15:48:38 -0400
+  Processing by ActsAsAuditedVisualizer::VisualizersController#index as HTML
+  [1m[36mUser Load (3.8ms)[0m  [1mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1[0m
+Rendered /srv/acts_as_audited_visualizer/app/views/acts_as_audited_visualizer/visualizers/index.html.erb within layouts/application (3.8ms)
+Completed 200 OK in 146ms (Views: 17.4ms | ActiveRecord: 3.8ms)
