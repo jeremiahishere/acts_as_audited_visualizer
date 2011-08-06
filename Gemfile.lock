@@ -28,7 +28,7 @@ GEM
       activemodel (= 3.0.9)
       activesupport (= 3.0.9)
     activesupport (3.0.9)
-    acts_as_audited (1.1.1)
+    acts_as_audited_rails3 (1.1.2)
       activerecord (>= 2.1)
     arel (2.0.10)
     bcrypt-ruby (2.1.4)
@@ -123,7 +123,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  acts_as_audited
+  acts_as_audited_rails3
   bundler (~> 1.0.0)
   capybara (>= 0.4.0)
   devise (~> 1.4.2)
