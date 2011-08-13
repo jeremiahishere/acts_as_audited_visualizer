@@ -7,7 +7,7 @@ $(document).ready(function()  {
   function update_audits()  {
     timestamp = self.last_update_timestamp
     $.ajax({
-      url: "acts_as_audited_visualizer/update_audits/" + timestamp,
+      url: "/acts_as_audited_visualizer/update_audits/" + timestamp,
       dataType: "json",
       success: function(json)  {
         self.last_update_timestamp = Number(new Date());

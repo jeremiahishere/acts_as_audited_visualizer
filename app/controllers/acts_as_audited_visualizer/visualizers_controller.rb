@@ -21,20 +21,23 @@ module ActsAsAuditedVisualizer
     def update_audits
       created_at = nil
       if params[:timestamp] == "undefined"
-        created_at = 1.day.ago
+        created_at = 1.year.ago
       else
-        created_at = Time.at(params[:timestamp].to_i/1000)
+        created_at = Time.at(params[:timestamp].to_i/1000).localtime
       end
-      audits = Audit.where(["created_at > ? or updated_at > ?", created_at, created_at])
+      audits = Audit.where(["created_at > ?", created_at])
       output = {}
       audits.each do |audit|
         record = []
         # user
-        record.push({
-          :model => "User", 
-          :id => audit.user_id, 
-          :name => User.find_by_id(audit.user_id).name
-        })
+        user = User.find_by_id(audit.user_id)
+        if user
+          record.push({
+            :model => "User", 
+            :id => audit.user_id, 
+            :name => user.name
+          })
+        end
         # base record
         record.push({
           :model => audit.auditable_type,
@@ -47,7 +50,7 @@ module ActsAsAuditedVisualizer
             key_model = key.gsub(/_id$/, "").camelize
             if key_model.constantize
               instance = key_model.constantize.find_by_id(value)
-              if instance
+              if !instance.nil? && instance.respond_to?(:name)
                 record.push({
                   :model => key_model,
                   :id => value,
