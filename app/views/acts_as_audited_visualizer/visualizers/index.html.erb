@@ -39,6 +39,9 @@
               found_a_match = true;
             }
           }
+          mover.randomize_rotate_speed();
+        } else {
+          mover.update_rotation();
         }
       }
     },
@@ -48,6 +51,13 @@
     initialize: function(path)  {
       this.path = path;
       this.destination = Point.random() * view.size;
+      this.randomize_rotate_speed();
+    },
+    randomize_rotate_speed: function()  {
+      this.rotate_speed = (Math.random() * 20) - 10;
+    },
+    update_rotation: function()  {
+      this.path.rotate(this.rotate_speed);
     },
   });
 
