@@ -1,49 +1,60 @@
 <div class="content">This is the audit history<br /></div>
 <script type="text/paperscript" canvas="visualization_canvas">
 
-  // Create a circle shaped path with its center at the center
-  // of the view and a radius of 30:
-  var path = new Path.Circle(view.center, 30);
-  path.strokeColor = 'black';
-
-  function onResize(event) {
-    // Whenever the window is resized, recenter the path:
-    path.position = view.center;
+  //var path = new Path.Circle(view.center, 30);
+  //path.strokeColor = 'black';
+  var fill_colors = new Array("blue", "red", "green", "yellow");
+  var paths = new Array();
+  var destinations = new Array();
+  var num_paths = 40;
+  for(var i = 0; i < num_paths; i++)  {
+    // Create a circle shaped path with its center near the center
+    // of the view and a radius of something near 30
+    path = new Path.Circle(view.center + i, i);
+    path.strokeColor = fill_colors[i % 4]; 
+    path.fillColor = fill_colors[i % 4];
+    paths.push(path);
+    
+    // Define a random point in the view, which we will be moving
+    // the text item towards.
+    destinations.push(Point.random() * view.size);
   }
 
-
-  // Create a centered text item at the center of the view:
-  var text = new PointText(view.center);
-  text.paragraphStyle.justification = 'center';
-  text.characterStyle.fontSize = 20;
-  text.fillColor = 'blue';
-
-  // Define a random point in the view, which we will be moving
-  // the text item towards.
-  var destination = Point.random() * view.size;
-
   function onFrame(event) {
-    // Each frame, move the path 1/30th of the difference in position
-    // between it and the destination.
+    for(var i = 0; i < num_paths; i++)  {
+      // Each frame, move the path 1/30th of the difference in position
+      // between it and the destination.
 
-    // The vector is the difference between the position of
-    // the text item and the destination point:
-    var vector = destination - text.position;
+      // The vector is the difference between the position of
+      // the text item and the destination point:
+      var vector = destinations[i] - paths[i].position;
 
-    // We add 1/30th of the vector to the position property
-    // of the text item, to move it in the direction of the
-    // destination point:
-    text.position += vector / 30;
+      // We add 1/30th of the vector to the position property
+      // of the text item, to move it in the direction of the
+      // destination point:
+      paths[i].position += vector / 30;
 
-    // Set the content of the text item to be the length of the vector.
-    // I.e. the distance it has to travel still:
-    text.content = Math.round(vector.length);
+      // If the distance between the path and the destination is less
+      // than 5, we define a new random point in the view to move the
+      // path to:
+      if (vector.length < 5) {
+        var found_a_match = false;
+        while(found_a_match == false)  {
+          var potential_match = Math.floor(Math.random() * num_paths)
+          //check if the randomly generated target matches the color of the current
+          if(paths[potential_match].style.fillColor == paths[i].style.fillColor)  {
+            //set the destination
+            destinations[i] = new Point(paths[potential_match].bounds.x, paths[potential_match].bounds.y);
+            //hack to move to random point if we go out of bounds
+            if(destinations[i].x < 0 || destinations[i].y < 0)  {
+              destinations[i] = Point.random() * view.size;
+            }
+            //found a match so stop looping
+            found_a_match = true;
+          }
+        }
+      }
 
-    // If the distance between the path and the destination is less
-    // than 5, we define a new random point in the view to move the
-    // path to:
-    if (vector.length < 5) {
-      destination = Point.random() * view.size;
     }
   }
 </script>
