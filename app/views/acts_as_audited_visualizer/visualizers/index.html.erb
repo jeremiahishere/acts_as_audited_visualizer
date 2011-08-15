@@ -89,6 +89,8 @@
       this.path = new Path.RegularPolygon(view.center + num, (num % 10) + 3, num);
       this.path.strokeColor = "white";
       this.path.fillColor = color;
+      //makes everything slow as shit
+      //this.path.opacity = 0.8;
 
       this.text = new PointText(this.path.position);
       this.text.paragraphStyle.justification = 'center';
@@ -122,6 +124,8 @@
     },
   });
 
+  var background = new Path.Rectangle(view.bounds);
+  background.fillColor = 'black';
   mover_group = new RandomMoverGroup(40);
 
   function onFrame(event) {
