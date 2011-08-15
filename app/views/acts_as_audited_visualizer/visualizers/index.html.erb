@@ -96,7 +96,7 @@
     move_to_destination: function()  {
       vector = this.destination - this.path.position;
       this.path.position += vector / 30;
-      this.text.position += vector / 30;
+      this.text.position = this.path.position;
       for(var i = 0; i < this.connections.length; i++)  {
         this.connections[i].update_position(this, this.path.position);
       }
