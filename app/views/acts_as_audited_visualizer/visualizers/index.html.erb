@@ -8,19 +8,14 @@
       this.movers = [];
       this.num_paths = num_paths
       for(var i = 0; i < this.num_paths; i++)  {
-        //path = new Path.Circle(view.center + i, i);
-        path = new Path.RegularPolygon(view.center + i, (i % 10) + 3, i);
-        //path.strokeColor = this.fill_colors[i % this.num_fill_colors]; 
-        path.strokeColor = "white";
-        path.fillColor = this.fill_colors[i % this.num_fill_colors];
-        this.movers.push(new Mover(path));
+        var color = this.fill_colors[i % this.num_fill_colors]
+        this.movers.push(new Mover(color, i));
       }
     },
     update_positions: function()  {
       for(var i = 0; i < this.num_paths; i++)  {
         var mover = this.movers[i];
-        var vector = mover.destination- mover.path.position;
-        mover.path.position += vector / 30;
+        var vector = mover.move_to_destination();
 
         if (vector.length < 5) {
           var found_a_match = false;
@@ -48,8 +43,18 @@
   });
 
   var Mover = Base.extend({
-    initialize: function(path)  {
-      this.path = path;
+    initialize: function(color, num)  {
+      //path = new Path.Circle(view.center + i, i);
+      this.path = new Path.RegularPolygon(view.center + num, (num % 10) + 3, num);
+      this.path.strokeColor = "white";
+      this.path.fillColor = color;
+
+      this.text = new PointText(this.path.position);
+      this.text.paragraphStyle.justification = 'center';
+      this.text.characterStyle.fontSize = num/2;
+      this.text.fillColor = 'white';
+      this.text.content = num;
+
       this.destination = Point.random() * view.size;
       this.randomize_rotate_speed();
     },
@@ -58,6 +63,12 @@
     },
     update_rotation: function()  {
       this.path.rotate(this.rotate_speed);
+    },
+    move_to_destination: function()  {
+      vector = this.destination - this.path.position;
+      this.path.position += vector / 30;
+      this.text.position += vector / 30;
+      return vector;
     },
   });
 
