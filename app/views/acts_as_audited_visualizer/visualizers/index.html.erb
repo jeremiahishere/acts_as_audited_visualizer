@@ -10,6 +10,21 @@
       for(var i = 0; i < this.num_paths; i++)  {
         var color = this.fill_colors[i % this.num_fill_colors]
         this.movers.push(new Mover(color, i));
+        if(i > this.num_fill_colors)  {
+          start = this.movers[i]
+          end = this.find_mover_with_same_color(start, i);
+          var conn = new Connection(start, end, color);
+        }
+      }
+    },
+    find_mover_with_same_color: function(yourself, max)  {
+      while(true)  {
+        var potential_match = Math.floor(Math.random() * max)
+        match = this.movers[potential_match];
+        //check if the randomly generated target matches the color of the current
+        if(match != yourself && match.path.style.fillColor == yourself.path.style.fillColor)  {
+          return match;
+        }
       }
     },
     update_positions: function()  {
@@ -18,21 +33,12 @@
         var vector = mover.move_to_destination();
 
         if (vector.length < 5) {
-          var found_a_match = false;
-          while(found_a_match == false)  {
-            var potential_match = Math.floor(Math.random() * this.num_paths)
-            match = this.movers[potential_match];
-            //check if the randomly generated target matches the color of the current
-            if(match.path.style.fillColor == mover.path.style.fillColor)  {
-              //set the destination
-              mover.destination = new Point(match.path.bounds.x,  match.path.bounds.y);
-              //hack to move to random point if we go out of bounds
-              if(mover.destination.x < 0 || mover.destination.y < 0)  {
-                mover.destination = Point.random() * view.size;
-              }
-              //found a match so stop looping
-              found_a_match = true;
-            }
+          //set the destination
+          match = this.find_mover_with_same_color(mover, this.num_paths);
+          mover.destination = new Point(match.path.bounds.x,  match.path.bounds.y);
+          //hack to move to random point if we go out of bounds
+          if(mover.destination.x < 0 || mover.destination.y < 0)  {
+            mover.destination = Point.random() * view.size;
           }
           mover.randomize_rotate_speed();
         } else {
@@ -42,6 +48,27 @@
     },
   });
 
+  var Connection = Base.extend({
+    initialize: function(start, end, color)  {
+      this.path = new Path();
+      this.path.strokeColor = color;
+      this.start = start
+      this.end = end
+
+      this.path.add(start.add_connection(this));
+      this.path.add(end.add_connection(this));
+    },
+    update_position: function(caller, new_pos)  {
+      if(caller == this.start)  {
+        this.path.segments[0].point.x = new_pos.x;
+        this.path.segments[0].point.y = new_pos.y;
+      } else  {
+        this.path.segments[1].point.x = new_pos.x;
+        this.path.segments[1].point.y = new_pos.y;
+      }
+    },
+  });
+  
   var Mover = Base.extend({
     initialize: function(color, num)  {
       //path = new Path.Circle(view.center + i, i);
@@ -54,6 +81,8 @@
       this.text.characterStyle.fontSize = num/2;
       this.text.fillColor = 'white';
       this.text.content = num;
+
+      this.connections = new Array();
 
       this.destination = Point.random() * view.size;
       this.randomize_rotate_speed();
@@ -68,11 +97,18 @@
       vector = this.destination - this.path.position;
       this.path.position += vector / 30;
       this.text.position += vector / 30;
+      for(var i = 0; i < this.connections.length; i++)  {
+        this.connections[i].update_position(this, this.path.position);
+      }
       return vector;
+    },
+    add_connection: function(path)  {
+      this.connections.push(path);
+      return this.path.position;
     },
   });
 
-  mover_group = new RandomMoverGroup(60);
+  mover_group = new RandomMoverGroup(40);
 
   function onFrame(event) {
     mover_group.update_positions();
