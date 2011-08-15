@@ -116,6 +116,22 @@
       for(var i = 0; i < this.connections.length; i++)  {
         this.connections[i].update_position(this, this.path.position);
       }
+
+      //scaling
+      //get the distance squared between the first two segments
+      first_segment = this.path.firstSegment;
+      second_segment = first_segment.next;
+      segment_distance_sq = first_segment.point.getDistance(second_segment.point, true)
+      if(segment_distance_sq < 25)  {
+        //if below the threshold, make it much bigger
+        this.path.scale(12);
+        this.text.characterStyle.fontSize *= 12;
+      } else {
+        //if above a threshold, make it slightly smaller
+        this.path.scale(0.995);
+        this.text.characterStyle.fontSize *= 0.995;
+      }
+
       return vector;
     },
     add_connection: function(path)  {
