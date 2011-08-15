@@ -55,17 +55,31 @@
       this.start = start
       this.end = end
 
-      this.path.add(start.add_connection(this));
-      this.path.add(end.add_connection(this));
+      start_point = start.add_connection(this);
+      end_point = end.add_connection(this);
+      start_half_point = new Point((start_point.x + end_point.x) / 2, start_point.y);
+      end_half_point = new Point((start_point.x + end_point.x) / 2, end_point.y);
+
+      this.path.add(start_point);
+      this.path.add(start_half_point);
+      this.path.add(end_half_point);
+      this.path.add(end_point);
     },
     update_position: function(caller, new_pos)  {
       if(caller == this.start)  {
         this.path.segments[0].point.x = new_pos.x;
         this.path.segments[0].point.y = new_pos.y;
-      } else  {
-        this.path.segments[1].point.x = new_pos.x;
         this.path.segments[1].point.y = new_pos.y;
+      } else  {
+        this.path.segments[3].point.x = new_pos.x;
+        this.path.segments[3].point.y = new_pos.y;
+        this.path.segments[2].point.y = new_pos.y;
       }
+      this.path.segments[1].point.x = (this.path.segments[0].point.x + this.path.segments[3].point.x) / 2;
+      this.path.segments[2].point.x = (this.path.segments[0].point.x + this.path.segments[3].point.x) / 2;
+      //need to adjust the y coordinates to give a rounded rectangle style coordinates
+      //probably need two points per corner
+      //this.path.smooth();
     },
   });
   
