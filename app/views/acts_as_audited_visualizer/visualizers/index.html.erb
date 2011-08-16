@@ -1,21 +1,12 @@
-<div class="content">This is the audit history<br /></div>
-<script type="text/paperscript" canvas="visualization_canvas">
-  //create a background the size of the canvas
-  var background = new Path.Rectangle(view.bounds);
-  background.fillColor = 'black';
-
-  function onFrame(event) {
-  }
-
-  function onMouseDown(event)  {
-  }
-</script>
-<canvas id="visualization_canvas" resize>
-</canvas>
-
-<script>
+<script type='text/javascript'>
+//to be available to paperscript, things need to be outside the document ready
+var audits = {};
 $(document).ready(function()  {
   var last_update_timestamp = 0;
+
+  function get_audits()  {
+    return audits;
+  }
 
   //update the canvas with an ajax call to the controller
   function update_audits()  {
@@ -26,26 +17,9 @@ $(document).ready(function()  {
       success: function(json)  {
         self.last_update_timestamp = Number(new Date());
         //add the new data to the content div
-        inner_html = $('.content').html();
-        inner_html += audit_to_s(json);
-        $('.content').html(inner_html);
+        audits = $.extend(audits, json);
       }
     });
-  }
-
-  //convert input from the ajax call into tags
-  function audit_to_s(audit) {
-    output = "";
-    $.each(audit, function(id, audit_group)  {
-      output += "<div id='audit_group_" + id + "' class='audit_group'>";
-      $.each(audit_group, function(key, value)  {
-        output += "<span id='" + value.model + "-" + value.id + "' class='content_audit'>";
-        output += value.model + "<br />" + value.name + "<br />";
-        output += "</span>";
-      });
-      output += "</div>";
-    });
-    return output
   }
 
   //update the canvas every few seconds
@@ -58,3 +32,73 @@ $(document).ready(function()  {
   setTimeout(start_updating, 2000);
 });
 </script>
+<script type="text/paperscript" canvas="visualization_canvas">
+  //create a background the size of the canvas
+  var background = new Path.Rectangle(view.bounds);
+  background.fillColor = 'black';
+
+  //list of audit objects that have been converted for paperscript
+  var audit_list = new Array();
+  //list of model objects that have veen converted for paperscript
+  var model_list = new Array();
+
+  function audit_already_exists(audit_id)  {
+    for(var i = 0; i < audit_list.length; i++)  {
+      if(audit_list[i].audit_id == audit_id)  {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function model_already_exists(model_id, model_type)  {
+    for(var i = 0; i < model_list.length; i++)  {
+      if(model_list[i].model_id == model_id && model_list[i].model_type == model_type)  {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function onFrame(event) {
+    for(var key in audits)  {
+      if(!audit_already_exists(key])  {
+        new_audit = new Audit(key)
+        audit_list.push(new_audit);
+        for(var i = 0; i < audits[key].length; i++)  {
+          new_model = audits[key][i]
+          if(model_already_exists(new_model.id, new_model.type))  {
+            //find the old model
+          } else {
+            model = new Model(new_model.id, new_model.type);
+          }
+          //associate the new/found model with the new audit
+        }
+      }
+    }
+  }
+
+  function onMouseDown(event)  {
+  }
+
+  //stores an audit and all of its associated models
+  var Audit = Base.extend({
+    audit_id: 0,
+    initialize: function(audit_id)  {
+      this.audit_id = audit_id;
+    },
+  });
+
+  //stores a model that isn't an audit and links it to the audits
+  var Model = Base.extend({
+    model_id: 0,
+    model_type: "",
+    initialize: function(model_id, model_type)  {
+      this.model_id = model_id;
+      this.model_type = model_type;
+    },
+  });
+</script>
+<canvas id="visualization_canvas" resize>
+</canvas>
+
