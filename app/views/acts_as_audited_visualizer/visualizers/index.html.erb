@@ -51,29 +51,27 @@ $(document).ready(function()  {
     return false;
   }
 
-  function model_already_exists(model_id, model_type)  {
+  function find_or_create_model(new_model)  {
     for(var i = 0; i < model_list.length; i++)  {
-      if(model_list[i].model_id == model_id && model_list[i].model_type == model_type)  {
-        return true;
+      if(model_list[i].is_self(new_model))  {
+        return model_list[i]
       }
     }
-    return false;
+    model = new Model(new_model);
+    model_list.push(model);
+    return model;
   }
 
   function onFrame(event) {
     for(var key in audits)  {
-      if(!audit_already_exists(key])  {
+      if(!audit_already_exists(key))  {
         new_audit = new Audit(key)
-        audit_list.push(new_audit);
         for(var i = 0; i < audits[key].length; i++)  {
-          new_model = audits[key][i]
-          if(model_already_exists(new_model.id, new_model.type))  {
-            //find the old model
-          } else {
-            model = new Model(new_model.id, new_model.type);
-          }
-          //associate the new/found model with the new audit
+          new_model = audits[key][i];
+          model = find_or_create_model(new_model);
+          new_audit.add_model(model);
         }
+        audit_list.push(new_audit);
       }
     }
   }
@@ -86,6 +84,28 @@ $(document).ready(function()  {
     audit_id: 0,
     initialize: function(audit_id)  {
       this.audit_id = audit_id;
+      this.models = new Array;
+    },
+    add_model: function(model)  {
+      for(var i = 0; i < this.models.length; i++)  {
+        connection = new Connection(this.models[i], model);
+      }
+      this.models.push(model);
+    }
+  });
+
+  var Connection = Base.extend({
+    initialize: function(start, end)  {
+      this.connection = new Path();
+      this.connection.strokeColor = "white";
+      this.start = start;
+      this.end = end;
+
+      start_point = start.add_connection(this);
+      end_point = end.add_connection(this);
+
+      this.connection.add(start_point);
+      this.connection.add(end_point);
     },
   });
 
@@ -93,9 +113,29 @@ $(document).ready(function()  {
   var Model = Base.extend({
     model_id: 0,
     model_type: "",
-    initialize: function(model_id, model_type)  {
-      this.model_id = model_id;
-      this.model_type = model_type;
+    initialize: function(model_obj)  {
+      this.model_id = model_obj.id;
+      this.model_type = model_obj.model;
+
+      size = (Math.random() * 25) + 25;
+      this.shape = new Path.Circle(Point.random() * view.size, size);
+      this.shape.strokeColor = "white";
+      this.shape.fillColor = "green";
+
+      this.title_text = new PointText(this.shape.position);
+      this.title_text.paragraphStyle.justification = 'center';
+      this.title_text.characterStyle.fontSize = Math.ceil(size / 5);
+      this.title_text.fillColor = 'white';
+      this.title_text.content = this.model_type + ": " + model_obj.name;
+
+      this.connections = new Array;
+    },
+    is_self: function(model)  {
+      return (model.model == this.model_type && model.id == this.model_id);
+    },
+    add_connection: function(path)  {
+      this.connections.push(path);
+      return this.shape.position;
     },
   });
 </script>
