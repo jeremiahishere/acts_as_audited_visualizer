@@ -85,8 +85,9 @@
   
   var Mover = Base.extend({
     initialize: function(color, num)  {
-      //path = new Path.Circle(view.center + i, i);
-      this.path = new Path.RegularPolygon(view.center + num, (num % 10) + 3, num);
+      //num can possibly be zero, so make sure it has a minimum size
+      this.path = new Path.Circle(view.center + num, num+1);
+      //this.path = new Path.RegularPolygon(view.center + num, (num % 10) + 3, num + 1);
       this.path.strokeColor = "white";
       this.path.fillColor = color;
       //makes everything slow as shit
@@ -100,6 +101,7 @@
 
       this.connections = new Array();
 
+      this.scaling_rate = 0.99 + (Math.random() * 0.01);
       this.destination = Point.random() * view.size;
       this.randomize_rotate_speed();
     },
@@ -122,14 +124,15 @@
       first_segment = this.path.firstSegment;
       second_segment = first_segment.next;
       segment_distance_sq = first_segment.point.getDistance(second_segment.point, true)
-      if(segment_distance_sq < 25)  {
+      //threshold is roughly 8 px
+      if(segment_distance_sq < 65)  {
         //if below the threshold, make it much bigger
-        this.path.scale(12);
-        this.text.characterStyle.fontSize *= 12;
+        this.path.scale(20);
+        this.text.characterStyle.fontSize *= 20;
       } else {
         //if above a threshold, make it slightly smaller
-        this.path.scale(0.995);
-        this.text.characterStyle.fontSize *= 0.995;
+        this.path.scale(this.scaling_rate);
+        this.text.characterStyle.fontSize *= this.scaling_rate;
       }
 
       return vector;
