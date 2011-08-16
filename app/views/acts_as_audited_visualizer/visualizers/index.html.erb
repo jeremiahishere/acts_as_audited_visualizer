@@ -124,13 +124,14 @@
 
       this.scaling_rate = 0.99 + (Math.random() * 0.01);
       this.destination = Point.random() * view.size;
-      this.randomize_rotate_speed();
+      //uncomment this line and the bodies of the randomize_rotate_speed and update_rotation methods
+      //this.randomize_rotate_speed();
     },
     randomize_rotate_speed: function()  {
-      this.rotate_speed = (Math.random() * 20) - 10;
+      //this.rotate_speed = (Math.random() * 20) - 10;
     },
     update_rotation: function()  {
-      this.path.rotate(this.rotate_speed);
+      //this.path.rotate(this.rotate_speed);
     },
     decrement_scale: function()  {
       this.set_scale(this.scaling_rate);
