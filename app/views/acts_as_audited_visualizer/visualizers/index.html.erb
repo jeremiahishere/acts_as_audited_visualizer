@@ -2,6 +2,7 @@
 <script type="text/paperscript" canvas="visualization_canvas">
 
   var RandomMoverGroup = Base.extend({
+    //initialize sets up basic values, the movers array, and add connections to the movers
     initialize: function(num_paths)  {
       this.num_fill_colors = 6;
       this.fill_colors = new Array("blue", "red", "green", "yellow", "purple", "orange");
@@ -10,16 +11,20 @@
       for(var i = 0; i < this.num_paths; i++)  {
         var color = this.fill_colors[i % this.num_fill_colors]
         this.movers.push(new Mover(color, i));
+        //don't try to make a connection when we are sure there is nothing that will match the color
         if(i > this.num_fill_colors)  {
           start = this.movers[i]
-          end = this.find_mover_with_same_color(start, i);
+          //this could potentially infinite loop if we start searching too early
+          end = this.find_mover_with_same_color(start);
           var conn = new Connection(start, end, color);
         }
       }
     },
-    find_mover_with_same_color: function(yourself, max)  {
+    //finds a mover with the same color as the input
+    //will infinite loop if there is no match
+    find_mover_with_same_color: function(yourself)  {
       while(true)  {
-        var potential_match = Math.floor(Math.random() * max)
+        var potential_match = Math.floor(Math.random() * this.movers.length)
         match = this.movers[potential_match];
         //check if the randomly generated target matches the color of the current
         if(match != yourself && match.path.style.fillColor == yourself.path.style.fillColor)  {
@@ -27,14 +32,18 @@
         }
       }
     },
+    //moves the mover towards the destination
+    //if the mover is at the destination, finds another mover to go to
+    //  this code probably needs to be improved, the new destination should be handled at the mover level
+    //also handles rotating the mover (Assuming you have commented the rotation back in)
     update_positions: function()  {
-      for(var i = 0; i < this.num_paths; i++)  {
+      for(var i = 0; i < this.movers.length; i++)  {
         var mover = this.movers[i];
         var vector = mover.move_to_destination();
 
         if (vector.length < 5) {
           //set the destination
-          match = this.find_mover_with_same_color(mover, this.num_paths);
+          match = this.find_mover_with_same_color(mover, this.movers.length);
           mover.destination = new Point(match.path.bounds.x,  match.path.bounds.y);
           //hack to move to random point if we go out of bounds
           if(mover.destination.x < 0 || mover.destination.y < 0)  {
@@ -46,6 +55,8 @@
         }
       }
     },
+    //on mouse click, triple the size of the mover you have clicked on
+    //do nothing if you didn't click on a mover
     handle_mouse_down: function(event)  {
       //this should probably be moved to the initializer
       var hit_options = {
@@ -70,6 +81,9 @@
   });
 
   var Connection = Base.extend({
+    //creates a segmented line that has two horizontal sections and one vertical section
+    //the end poitns are path objects
+    //the vertical section should stay at the midpoint between the two endpoints
     initialize: function(start, end, color)  {
       this.path = new Path();
       this.path.strokeColor = color;
@@ -86,6 +100,8 @@
       this.path.add(end_half_point);
       this.path.add(end_point);
     },
+    //update either the start or end point to be the new position
+    //calculate the new position of the two center points
     update_position: function(caller, new_pos)  {
       if(caller == this.start)  {
         this.path.segments[0].point.x = new_pos.x;
@@ -105,6 +121,9 @@
   });
   
   var Mover = Base.extend({
+    //creates some sort of shape, adds a little bit of text inside and maintains their size and position
+    //also includes links to connection objects
+    //also initializes the scaling, rotation, and where the mover is going
     initialize: function(color, num)  {
       //num can possibly be zero, so make sure it has a minimum size
       this.path = new Path.Circle(view.center + num, num+1);
@@ -127,9 +146,16 @@
       //uncomment this line and the bodies of the randomize_rotate_speed and update_rotation methods
       //this.randomize_rotate_speed();
     },
+    //adds a connection object to this mover and returns it's own position to set the value in the connection itself
+    add_connection: function(path)  {
+      this.connections.push(path);
+      return this.path.position;
+    },
+    //set the rotate speed to a random value between -10 and 10 degrees per frame
     randomize_rotate_speed: function()  {
       //this.rotate_speed = (Math.random() * 20) - 10;
     },
+    //update the rotation
     update_rotation: function()  {
       //this.path.rotate(this.rotate_speed);
     },
@@ -139,18 +165,13 @@
     increment_scale: function()  {
       this.set_scale(20);
     },
+    //sets the scale of the path and text
     set_scale: function(amount)  {
       this.path.scale(amount);
       this.text.characterStyle.fontSize *= amount;
     },
-    move_to_destination: function()  {
-      vector = this.destination - this.path.position;
-      this.path.position += vector / 30;
-      this.text.position = this.path.position;
-      for(var i = 0; i < this.connections.length; i++)  {
-        this.connections[i].update_position(this, this.path.position);
-      }
-
+    //updates the scaling level by incrementing or decrementing it
+    update_scaling: function()  {
       //scaling
       //get the distance squared between the first two segments
       first_segment = this.path.firstSegment;
@@ -164,23 +185,37 @@
         //if above a threshold, make it slightly smaller
         this.decrement_scale();
       }
+    },
+    //move the mover towards the destination
+    //also move related text and connections to the same place
+    //update the scaling
+    move_to_destination: function()  {
+      vector = this.destination - this.path.position;
+      this.path.position += vector / 30;
+      this.text.position = this.path.position;
+      for(var i = 0; i < this.connections.length; i++)  {
+        this.connections[i].update_position(this, this.path.position);
+      }
+
+      this.update_scaling();
 
       return vector;
     },
-    add_connection: function(path)  {
-      this.connections.push(path);
-      return this.path.position;
-    },
   });
 
+  //create a background the size of the canvas
   var background = new Path.Rectangle(view.bounds);
   background.fillColor = 'black';
+  //create the movers and connections
+  //the number is the number of objects
   mover_group = new RandomMoverGroup(40);
 
+  //on update, send to mover group
   function onFrame(event) {
     mover_group.update_positions();
   }
 
+  //on click, send to mover group
   function onMouseDown(event)  {
     mover_group.handle_mouse_down(event);
   }
