@@ -46,6 +46,27 @@
         }
       }
     },
+    handle_mouse_down: function(event)  {
+      //this should probably be moved to the initializer
+      var hit_options = {
+        fill: true,
+        tolerance: 5,
+      };
+      //captures the click event location
+      var hit_result = project.hitTest(event.point, hit_options);
+      //make sure we are on the inside of a path that has an inside
+      if(hit_result)  {
+        if(hit_result.type == "fill")  {
+          //loop over all the movers, and try to find one that matches the hit result
+          for(var i = 0; i < this.num_paths; i++)  {
+            if(this.movers[i].path == hit_result.item)  {
+              //triple the size
+              this.movers[i].set_scale(3);
+            }
+          }
+        }
+      }
+    },
   });
 
   var Connection = Base.extend({
@@ -111,6 +132,16 @@
     update_rotation: function()  {
       this.path.rotate(this.rotate_speed);
     },
+    decrement_scale: function()  {
+      this.set_scale(this.scaling_rate);
+    },
+    increment_scale: function()  {
+      this.set_scale(20);
+    },
+    set_scale: function(amount)  {
+      this.path.scale(amount);
+      this.text.characterStyle.fontSize *= amount;
+    },
     move_to_destination: function()  {
       vector = this.destination - this.path.position;
       this.path.position += vector / 30;
@@ -127,12 +158,10 @@
       //threshold is roughly 8 px
       if(segment_distance_sq < 65)  {
         //if below the threshold, make it much bigger
-        this.path.scale(20);
-        this.text.characterStyle.fontSize *= 20;
+        this.increment_scale();
       } else {
         //if above a threshold, make it slightly smaller
-        this.path.scale(this.scaling_rate);
-        this.text.characterStyle.fontSize *= this.scaling_rate;
+        this.decrement_scale();
       }
 
       return vector;
@@ -149,6 +178,10 @@
 
   function onFrame(event) {
     mover_group.update_positions();
+  }
+
+  function onMouseDown(event)  {
+    mover_group.handle_mouse_down(event);
   }
 </script>
 <canvas id="visualization_canvas" resize>
