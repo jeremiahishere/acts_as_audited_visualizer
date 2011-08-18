@@ -38,18 +38,9 @@ $(document).ready(function()  {
   background.fillColor = 'black';
 
   //list of audit objects that have been converted for paperscript
-  var audit_list = new Array();
+  var audit_list = {};
   //list of model objects that have veen converted for paperscript
   var model_list = new Array();
-
-  function audit_already_exists(audit_id)  {
-    for(var i = 0; i < audit_list.length; i++)  {
-      if(audit_list[i].audit_id == audit_id)  {
-        return true;
-      }
-    }
-    return false;
-  }
 
   function find_or_create_model(new_model)  {
     for(var i = 0; i < model_list.length; i++)  {
@@ -64,14 +55,14 @@ $(document).ready(function()  {
 
   function onFrame(event) {
     for(var key in audits)  {
-      if(!audit_already_exists(key))  {
+      if(! (key in audit_list) )  {
         new_audit = new Audit(key)
         for(var i = 0; i < audits[key].length; i++)  {
           new_model = audits[key][i];
           model = find_or_create_model(new_model);
           new_audit.add_model(model);
         }
-        audit_list.push(new_audit);
+        audit_list[new_audit.audit_id] = new_audit;
       }
     }
     for(var i = 0; i < model_list.length; i++)  {
