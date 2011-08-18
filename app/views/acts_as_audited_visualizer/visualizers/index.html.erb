@@ -41,6 +41,10 @@ $(document).ready(function()  {
   var audit_list = {};
   //list of model objects that have veen converted for paperscript
   var model_list = new Array();
+  //hash of colors for models
+  var model_colors = {};
+  var model_colors_size = 0;
+  var available_colors = ["green", "blue", "red", "teal", "orange", "purple"];
 
   function find_or_create_model(new_model)  {
     for(var i = 0; i < model_list.length; i++)  {
@@ -48,7 +52,15 @@ $(document).ready(function()  {
         return model_list[i]
       }
     }
-    model = new Model(new_model, Point.random() * view.size, 1, 0.5);
+    //optional code to set the color of the models
+    //feels like it needs a rewrite
+    model_type = new_model.model
+    if(!(model_type in model_colors))  {
+      model_colors[model_type] = available_colors[(model_colors_size % available_colors.length)];
+      model_colors_size++;
+    }
+    //finish setting code color
+    model = new Model(new_model, Point.random() * view.size, 1, 0.5, model_colors[model_type]);
     model_list.push(model);
     return model;
   }
@@ -123,7 +135,7 @@ $(document).ready(function()  {
   var Model = Base.extend({
     model_id: 0,
     model_type: "",
-    initialize: function(model_obj, position, max_speed, max_force)  {
+    initialize: function(model_obj, position, max_speed, max_force, color)  {
       this.model_id = model_obj.id;
       this.model_type = model_obj.model;
       
@@ -137,13 +149,13 @@ $(document).ready(function()  {
 
       this.shape = new Path.Circle(this.loc, this.radius);
       this.shape.strokeColor = "white";
-      this.shape.fillColor = "green";
+      this.shape.fillColor = color;
 
       this.title_text = new PointText(this.loc);
       this.title_text.paragraphStyle.justification = 'center';
       this.title_text.characterStyle.fontSize = 10;
       this.title_text.fillColor = 'white';
-      this.title_text.content = this.model_type + ": " + model_obj.name;
+      this.title_text.content = this.model_type + ": " + this.model_id;
 
       this.connections = new Array;
     },
