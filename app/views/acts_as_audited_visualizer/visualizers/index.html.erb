@@ -57,7 +57,7 @@ $(document).ready(function()  {
         return model_list[i]
       }
     }
-    model = new Model(new_model);
+    model = new Model(new_model, Point.random() * view.size, 10, 0.5);
     model_list.push(model);
     return model;
   }
@@ -73,6 +73,9 @@ $(document).ready(function()  {
         }
         audit_list.push(new_audit);
       }
+    }
+    for(var i = 0; i < model_list.length; i++)  {
+      model_list[i].run(model_list);
     }
   }
 
@@ -107,24 +110,47 @@ $(document).ready(function()  {
       this.connection.add(start_point);
       this.connection.add(end_point);
     },
+    update: function(caller, new_pos)  {
+      if(caller == this.start)  {
+        this.connection.segments[0].point.x = new_pos.x;
+        this.connection.segments[0].point.y = new_pos.y;
+      } else  {
+        this.connection.segments[1].point.x = new_pos.x;
+        this.connection.segments[1].point.y = new_pos.y;
+      }
+    },
+    get_other_model: function(model)  {
+      if(model == this.start)  {
+        return this.end
+      } else {
+        return this.start
+      }
+    },
   });
 
   //stores a model that isn't an audit and links it to the audits
   var Model = Base.extend({
     model_id: 0,
     model_type: "",
-    initialize: function(model_obj)  {
+    initialize: function(model_obj, position, max_speed, max_force)  {
       this.model_id = model_obj.id;
       this.model_type = model_obj.model;
+      
+      var strength = Math.random() * 0.5;
+      this.acceleration = new Point(0, 0);
+      this.velocity = new Point(Math.random() * 2 - 1, Math.random() * 2 - 1);
+      this.loc = position.clone();
+      this.radius = 30;
+      this.max_speed = max_speed + strength;
+      this.max_force = max_force + strength;
 
-      size = (Math.random() * 25) + 25;
-      this.shape = new Path.Circle(Point.random() * view.size, size);
+      this.shape = new Path.Circle(this.loc, this.radius);
       this.shape.strokeColor = "white";
       this.shape.fillColor = "green";
 
-      this.title_text = new PointText(this.shape.position);
+      this.title_text = new PointText(this.loc);
       this.title_text.paragraphStyle.justification = 'center';
-      this.title_text.characterStyle.fontSize = Math.ceil(size / 5);
+      this.title_text.characterStyle.fontSize = 10;
       this.title_text.fillColor = 'white';
       this.title_text.content = this.model_type + ": " + model_obj.name;
 
@@ -136,6 +162,146 @@ $(document).ready(function()  {
     add_connection: function(path)  {
       this.connections.push(path);
       return this.shape.position;
+    },
+    run: function(model_list)  {
+      this.prev_loc = this.loc.clone();
+      this.flock(model_list)
+
+      this.borders();
+      this.update();
+      
+      this.shape.position = this.loc;
+      this.title_text.position = this.loc;
+      for(var i = 0; i < this.connections.length; i++)  {
+        this.connections[i].update(this, this.shape.position);
+      }
+    },
+    //update the position based on the borders of the view
+    borders: function() {
+      var loc = this.loc;
+      var radius = this.radius;
+      var old_loc = this.loc.clone();
+      var width = view.size.width;
+      var height = view.size.height;
+      if (loc.x < -radius) loc.x = width + radius;
+      if (loc.y < -radius) loc.y = height + radius;
+      if (loc.x > width + radius) loc.x = -radius;
+      if (loc.y > height + radius) loc.y = -radius;
+      var vector = this.loc - old_loc;
+      //not sure what this does
+      //if (!vector.isZero())  {
+      //  this.path.position += vector;
+      //}
+    },
+    flock: function(all_models)  {
+      var connected_models = new Array;
+      for(var i = 0; i < this.connections.length; i++)  {
+        connected_models.push(this.connections[i].get_other_model());
+      }
+      //maintain distance between all models
+      var sep = this.separate(all_models) * 3;
+      //match speed with connected models
+      var ali = this.align(connected_models);
+      //move towards the center of all connected models
+      var coh = this.cohesion(connected_models);
+      this.acceleration += sep + ali + coh;
+    },
+    separate: function(all_models)  {
+      var desired_separation = 60;
+      var steer = new Point(0, 0);
+      var count = 0;
+      // For every modelin the system, check if it's too close
+      for (var i = 0; i < all_models.length; i++) {
+        var other = all_models[i];
+        var distance = other.loc.getDistance(this.loc);
+        //ignore self because distance will be 0
+        if (distance > 0 && distance < desired_separation) {
+          // Calculate vector pointing away from neighbor
+          var diff = this.loc - other.loc;
+          steer += diff.normalize(1 / distance);
+          count++;
+        }
+      }
+      // Average -- divide by how many
+      if (count > 0)  {
+        steer /= count;
+      }
+      if (steer.length > 0) {
+        // Implement Reynolds: Steering = Desired - Velocity
+        steer.length = this.max_speed;
+        steer -= this.velocity;
+        steer.length = Math.min(steer.length, this.max_force);
+      }
+      return steer;
+    },
+    align: function(connected_models) {
+      var steer = new Point(0, 0);
+      var count = 0;
+      for (var i = 0; i < connected_models.length; i++) {
+        var other = connected_models[i];
+        var distance = this.loc.getDistance(other.loc);
+        if (distance > 0) {
+          steer += other.velocity;
+          count++;
+        }
+      }
+
+      if (count > 0)  {
+        steer /= count;
+      }
+      if (steer.length > 0) {
+        // Implement Reynolds: Steering = Desired - Velocity
+        steer.length = this.max_speed;
+        steer -= this.velocity;
+        steer.length = Math.min(steer.length, this.max_force);
+      }
+      return steer;
+    },
+    cohesion: function(connected_models) {
+      var neighborDist = 100;
+      var sum = new Point(0, 0);
+      var count = 0;
+      for (var i = 0; i < connected_models.length; i++) {
+        var other = connected_models[i];
+        var distance = this.loc.getDistance(other.loc);
+        if (distance > 0) {
+          sum += other.loc; // Add location
+          count++;
+        }
+      }
+      if (count > 0) {
+        sum /= count;
+        // Steer towards the location
+        return this.steer(sum, false);
+      }
+      return sum;
+    },
+    steer: function(target, slowdown) {
+      var steer,
+      desired = target - this.loc,
+      distance = desired.length;
+      if (distance > 0) {
+        // Two options for desired vector magnitude (1 -- based on distance, 2 -- maxSpeed)
+        if (slowdown && distance < 100) {
+          desired.length = this.max_speed * (distance / 100); // This damping is somewhat arbitrary
+        } else {
+          desired.length = this.max_speed;
+        }
+        steer = desired - this.vel;
+        steer.length = Math.min(this.max_force, steer.length);
+      } else {
+        steer = new Point(0, 0);
+      }
+      return steer;
+    },
+    update: function() {
+      // Update velocity
+      this.velocity += this.acceleration;
+      // Limit speed (vector#limit?)
+      this.velocity.length = Math.min(this.max_speed, this.velocity.length);
+      this.loc += this.velocity;
+      // Reset acceleration to 0 each cycle
+      this.acceleration.length = 0;
     },
   });
 </script>
